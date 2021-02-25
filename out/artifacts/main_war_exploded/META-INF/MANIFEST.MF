@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Created-By: IntelliJ IDEA
+Built-By: 石桂华
+Build-Jdk: 11.0.2
+Implementation-Title: main
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: com.boot
+Main-Class: ${start-class}
+

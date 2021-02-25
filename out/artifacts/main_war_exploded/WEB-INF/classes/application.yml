@@ -1,0 +1,9 @@
+server:
+  port: 80
+spring:
+  thymeleaf:
+    cache: false
+  mvc:
+    view:
+      prefix: /templates/
+      suffix: .html

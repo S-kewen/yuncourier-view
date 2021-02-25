@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="https://static.iskwen.com/layui-v2.5.5/layui/css/layui.css" media="all">
+    <script src="https://static.iskwen.com/jquery-v3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="https://static.iskwen.com/layui-v2.5.5/layui/layui.all.js" charset="utf-8"></script>
+    <script src="https://static.iskwen.com/yuncourier/js/util.js"></script>
+    <script src="https://static.iskwen.com/yuncourier/js/messagebox.js"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d6edbe06194cd058fc9719532b6f714d";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153564967-5"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-153564967-5');
+    </script>
+</head>
+<body>
+<form class="layui-form layui-form-pane" id="createUser">
+    <div class="layui-tab">
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">lineConfigId</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="lineConfigId" name="lineConfigId" autocomplete="off"
+                               placeholder="lineConfigId,系統自動生成" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">配置名稱</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="lineConfigName" name="lineConfigName" autocomplete="off"
+                               placeholder="配置名稱,長度不能大於255" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">userId</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="userId" name="userId" autocomplete="off" placeholder="userId,通過webhook取得"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">類型</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="type" name="type" autocomplete="off"
+                               placeholder="type" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">狀態</label>
+                    <div class="layui-input-inline">
+                        <select id="state" name="state" lay-verify="state">
+                            <option value="0" disabled>未知</option>
+                            <option value="1">成功</option>
+                            <option value="2">失敗</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">內容</label>
+                    <div class="layui-input-block">
+                        <textarea id="text" name="text" placeholder="推送內容,長度不能超過6000" class="layui-textarea"
+                                  style="height: 150px"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">客戶端IP</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="ip" name="ip" autocomplete="off" placeholder="ip,長度不能超過255"
+                               class="layui-input">
+                    </div>
+                    <label class="layui-form-label">創建時間</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="addTime" name="addTime" autocomplete="off" placeholder="發送時間,長度不能超過255"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <textarea id="remark" name="remark" placeholder="備註信息,長度不能超過255" class="layui-textarea"
+                                  style="height: 150px"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            url:"//courier-api.iskwen.com/api/getPushMessageInfo",
+            type:"POST",
+            dataType: "json",
+            data:"id="+getUrlValue("id"),
+            headers: {'Authorization': getCookie("token")},
+            success:function(msg){
+                if(msg.status==0){
+                    $("#lineConfigId").val(msg.lineConfigId);
+                    $("#lineConfigName").val(msg.lineConfigName);
+                    $("#userId").val(msg.userId);
+                    $("#type").val(msg.type);
+                    $("#state").find("option[value='"+msg.state+"']").attr("selected",true);
+                    $("#text").html(msg.text);
+                    $("#ip").val(msg.ip);
+                    $("#addTime").val(msg.addTime);
+                    $("#remark").html(msg.remark);
+                }else{
+                    showTip(msg.tip);
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                <!--showErrorMsg(XMLHttpRequest.status);-->
+                showErrorMsg("系统在开小差，请稍后再试");
+            }
+        });
+    })
+    var form = layui.form;
+    form.render();
+    var laydate = layui.laydate;
+    laydate.render({
+        elem: '#addTime',
+        type: 'datetime',
+        trigger: 'click',//呼出事件改成click
+        format: 'yyyy-MM-dd HH:mm:ss'
+    });
+</script>
+</body>
+</html>

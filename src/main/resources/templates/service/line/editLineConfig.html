@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="https://static.iskwen.com/layui-v2.5.5/layui/css/layui.css" media="all">
+    <script src="https://static.iskwen.com/jquery-v3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="https://static.iskwen.com/layui-v2.5.5/layui/layui.all.js" charset="utf-8"></script>
+    <script src="https://static.iskwen.com/yuncourier/js/util.js" charset="utf-8"></script>
+    <script src="https://static.iskwen.com/yuncourier/js/messagebox.js"></script>
+    <script src="https://static.iskwen.com/cryptoJS-v2019/components/core.js" charset="utf-8"></script>
+    <script src="https://static.iskwen.com/cryptoJS-v2019/components/evpkdf.js" charset="utf-8"></script>
+    <script src="https://static.iskwen.com/cryptoJS-v2019/components/enc-base64.js" charset="utf-8"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d6edbe06194cd058fc9719532b6f714d";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153564967-5"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-153564967-5');
+    </script>
+</head>
+<body>
+<form class="layui-form layui-form-pane" id="editLineConfig">
+    <div class="layui-tab">
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">應用</label>
+                    <div class="layui-input-block">
+                        <select name="softwareId" id="softwareId" lay-search>
+                            <option value="0" disabled>正在加載</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">配置名稱</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="lineName" id="lineName" value='' placeholder="長度不能超過255"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">channelId</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="channelId" id="channelId" value='' placeholder="長度不能超過255"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">secret</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="channelSecret" id="channelSecret" placeholder="長度不能超過255" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                    <label class="layui-form-label">token</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="token" id="token" placeholder="長度不能超過255" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">備註</label>
+                        <div class="layui-input-block">
+                            <textarea name="remark" id="remark" placeholder="請輸入備註，長度不能超過255"
+                                      class="layui-textarea"></textarea>
+                        </div>
+                        <!--                    <div class="layui-form-mid layui-word-aux">無配置默認為:允許訪問</div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+<script>
+    var nowSoftwareId = 0;
+    var form = layui.form;
+    $.ajax({
+        url: "//courier-api.iskwen.com/api/getLineConfigInfo",
+        type: "POST",
+        dataType: "json",
+        data: "id=" + getUrlValue("id"),
+        async: false,
+        headers: {'Authorization': getCookie("token")},
+        success: function (msg) {
+            if (msg.status == 0) {
+                nowSoftwareId = msg.softwareId;
+                $("#lineName").val(msg.lineName);
+                $("#channelId ").val(msg.channelId);
+                $("#channelSecret").val(msg.channelSecret);
+                $("#token").val(msg.token);
+                $("#remark").html(msg.remark);
+            } else {
+                showTip(msg.tip);
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            <!--showErrorMsg(XMLHttpRequest.status);-->
+            showErrorMsg("系统在开小差，请稍后再试");
+        }
+    });
+    $.ajax({
+        url: "//courier-api.iskwen.com/api/listMySoftware",
+        type: "post",
+        dataType: "json",
+        data: "pageNumber=1&pageSize=10000000&state=1",
+        headers: {'Authorization': getCookie("token")},
+        success: function (msg) {
+            if (msg.list !== undefined) {
+                // var optionstring="<option value='-1'>不限</option>";
+                var optionstring = "";
+                for (var j = 0; j < msg.list.length; j++) {
+                    optionstring += "<option value=\"" + msg.list[j].id + "\" >" + msg.list[j].software_name + " " + "</option>";
+                }
+                $("#softwareId").html(optionstring);
+                $("#softwareId").find("option[value='" + nowSoftwareId + "']").attr("selected", true);
+                form.render();
+            } else {
+                showTip(msg.tip);
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            showErrorMsg("系统在开小差，请稍后再试");
+        }
+    })
+</script>
+</html>

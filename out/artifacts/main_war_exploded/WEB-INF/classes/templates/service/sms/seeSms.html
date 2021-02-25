@@ -1,0 +1,118 @@
+
+
+
+
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layui-v2.5.5/layui/css/layui.css"media="all">
+</head>
+<body>
+
+
+<form class="layui-form layui-form-pane" id="createUser">
+    <div class="layui-tab">
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">應用Id</label>
+                    <div class="layui-input-inline" >
+                        <input type="text" id="softwareId" name="softwareId" autocomplete="off" placeholder="應用Id,系統自動生成" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">應用名稱</label>
+                    <div class="layui-input-inline" >
+                        <input type="text" id="softwareName" name="softwareName" autocomplete="off" placeholder="軟件名稱,長度不能大於16" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">token</label>
+                    <div class="layui-input-block" >
+                        <input type="text" id="token" name="token" autocomplete="off" placeholder="token,系統自動生成" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">類型</label>
+                    <div class="layui-input-inline" >
+                        <select id="type" name="type" lay-verify="content_type">
+                            <option value="0"  disabled>未知</option>
+                            <option value="1">台灣</option>
+                            <option value="2">中國</option>
+                            <option value="3">其他</option>
+                        </select>
+                    </div>
+                    <label class="layui-form-label">狀態</label>
+                    <div class="layui-input-inline" >
+                        <select id="state" name="state" lay-verify="state">
+                            <option value="0"  disabled>未知</option>
+                            <option value="1">成功</option>
+                            <option value="2">失敗</option>
+                            <option value="3">補發</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">主題</label>
+                    <div class="layui-input-inline" >
+                        <input type="text" id="subject" name="subject" autocomplete="off" placeholder="短信主體(用於後台記錄),長度不能超過255" class="layui-input" >
+                    </div>
+                    <label class="layui-form-label">手機號碼</label>
+                    <div class="layui-input-inline" >
+                        <input type="text" id="receive_phone" name="receive_phone" autocomplete="off" placeholder="收件人,長度不能超過255" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">內容</label>
+                    <div class="layui-input-block" >
+                        <textarea id="msg" name="msg" placeholder="短信內容,長度不能超過6000" class="layui-textarea" style="height: 150px"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">客戶端IP</label>
+                    <div class="layui-input-inline" >
+                        <input type="text" id="ip" name="ip" autocomplete="off" placeholder="ip,長度不能超過255" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">創建時間</label>
+                    <div class="layui-input-inline" >
+                        <input type="text" id="addTime" name="addTime" autocomplete="off" placeholder="發送時間,長度不能超過255" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block" >
+                        <textarea id="remark" name="remark" placeholder="備註信息,長度不能超過255" class="layui-textarea" style="height: 150px"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="/layui-v2.5.5/layui/layui.js" charset="utf-8"></script>
+<script src="/jquery-v3.4.1/jquery-3.4.1.min.js"></script>
+<script src="/js/messagebox.js"></script>
+<script src="/js/util.js"></script>
+<script src="/js/templates/service/sms/seeSms.js"></script>
+<script>
+    layui.use('form', function () {
+        var form = layui.form;
+        form.render();
+    });
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#addTime',
+            type: 'datetime',
+            trigger: 'click',//呼出事件改成click
+            format: 'yyyy-MM-dd HH:mm:ss'
+        });
+    });
+</script>
+</body>
+</html>

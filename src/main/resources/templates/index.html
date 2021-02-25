@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>雲通訊系統</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="https://static.iskwen.com/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+  <link href="https://static.iskwen.com/yuncourier/css/font-awesome.min93e3.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://static.iskwen.com/layui-v2.5.5/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="https://static.iskwen.com/layui-v2.5.5/layui/style/admin.css" media="all">
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d6edbe06194cd058fc9719532b6f714d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153564967-5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-153564967-5');
+  </script>
+</head>
+<body class="layui-layout-body">
+  
+  <div id="LAY_app">
+    <div class="layui-layout layui-layout-admin">
+      <div class="layui-header">
+        <!-- 头部区域 -->
+        <ul class="layui-nav layui-layout-left">
+          <li class="layui-nav-item layadmin-flexible" lay-unselect>
+            <a href="javascript:;" layadmin-event="flexible" title="側邊伸縮">
+              <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+            </a>
+          </li>
+          <li class="layui-nav-item layui-hide-xs" lay-unselect>
+            <a href="//courier-api.iskwen.com/druid" target="_blank" title="druid">
+              <i class="layui-icon layui-icon-chart"><span class="layui-badge-dot"></span></i>
+            </a>
+          </li>
+          <li class="layui-nav-item" lay-unselect>
+            <a href="javascript:refresh();" layadmin-event="refresh" title="刷新">
+              <i class="layui-icon layui-icon-refresh-3"></i>
+            </a>
+          </li>
+<!--          <li class="layui-nav-item layui-hide-xs" lay-unselect>-->
+<!--            <input type="text" placeholder="搜索..." autocomplete="off" class="layui-input layui-input-search" layadmin-event="serach" lay-action="template/search.html?keywords="> -->
+<!--          </li>-->
+        </ul>
+        <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+          
+          <li class="layui-nav-item" lay-unselect>
+            <a id="messageButton" name="messageButton" lay-href="/user/listMessage" href="javascript:getUnreadMessageCount();" layadmin-event="message" lay-text="信息中心">
+              <i class="layui-icon layui-icon-notice"><span class="layui-badge" id="messageState">0</span></i>
+            </a>
+          </li>
+          <li class="layui-nav-item layui-hide-xs" lay-unselect>
+            <a href="javascript:;" layadmin-event="theme">
+              <i class="layui-icon layui-icon-theme"></i>
+            </a>
+          </li>
+          <li class="layui-nav-item layui-hide-xs" lay-unselect>
+            <a href="javascript:note();" layadmin-event="note">
+              <i class="layui-icon layui-icon-note"></i>
+            </a>
+          </li>
+<!--          <li class="layui-nav-item layui-hide-xs" lay-unselect>-->
+<!--            <a href="javascript:locking();" >-->
+<!--              <i class="layui-icon layui-icon-pause"></i>-->
+<!--            </a>-->
+<!--          </li>-->
+          <li class="layui-nav-item layui-hide-xs" lay-unselect>
+            <a href="javascript:;" layadmin-event="fullscreen">
+              <i class="layui-icon layui-icon-screen-full"></i>
+            </a>
+          </li>
+          <li class="layui-nav-item" lay-unselect>
+            <a href="javascript:;">
+              <cite id="usernameByCite"></cite>
+            </a>
+            <dl class="layui-nav-child">
+              <dd><a lay-href="/user/index" style="text-align: center;">個人中心</a></dd>
+              <dd><a href="javascript:modifyInfo();" style="text-align: center;">修改資料</a></dd>
+              <dd><a href="javascript:modifyPassword();" style="text-align: center;">修改密碼</a></dd>
+              <hr>
+              <dd><a href="javascript:logout();" style="text-align: center;">退出</a></dd>
+            </dl>
+          </li>
+          
+          <li class="layui-nav-item layui-hide-xs" lay-unselect>
+            <a href="javascript:showTip('當前瀏覽器不支持event,請切換至PC端後再試');" id="versionMsg" name="versionMsg"><i class="layui-icon layui-icon-more-vertical"></i></a>
+          </li>
+          <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
+            <a href="javascript:;" layadmin-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- 侧边菜单 -->
+      <div class="layui-side layui-side-menu">
+        <div class="layui-side-scroll">
+          <div class="layui-logo" lay-href="/home/console">
+            <span id="usernameBySpan">yunCourier-云遞</span>
+          </div>
+          
+          <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+            <li data-name="home" class="layui-nav-item layui-nav-itemed">
+              <a href="javascript:;" lay-tips="主頁" lay-direction="2">
+                <i class="layui-icon layui-icon-home"></i>
+                <cite>主頁</cite>
+              </a>
+              <dl class="layui-nav-child list-group">
+                <dd data-name="console" class="layui-this">
+                  <a class="list-group-item" lay-href="/home/console"><i class="fa fa-tachometer fa-fw"></i>&nbsp;控制台</a>
+                </dd>
+              </dl>
+            </li>
+            <li data-name="user" class="layui-nav-item">
+              <a href="javascript:;" lay-tips="個人" lay-direction="2">
+                <i class="layui-icon layui-icon-user"></i>
+                <cite>個人</cite>
+              </a>
+              <dl class="layui-nav-child list-group">
+                <dd>
+                  <a class="list-group-item" lay-href="/user/index"><i class="fa fa-user-circle-o fa-fw" aria-hidden="true"></i>&nbsp;個人中心</a>
+                </dd>
+                <dd>
+                  <a class="list-group-item" lay-href="/user/listTransaction"><i class="fa fa-usd fa-fw" aria-hidden="true"></i>&nbsp;交易明細</a>
+                </dd>
+                <dd>
+                  <a class="list-group-item" lay-href="/user/listLoginRecord"><i class="fa fa-shield fa-fw" aria-hidden="true"></i>&nbsp;登錄記錄</a>
+                </dd>
+                <dd>
+                  <a class="list-group-item"  lay-href="/user/listMessage"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp;信息中心</a>
+                </dd>
+              </dl>
+            </li>
+            <li data-name="app" class="layui-nav-item">
+              <a href="javascript:;" lay-tips="应用" lay-direction="2">
+                <i class="layui-icon layui-icon-app"></i>
+                <cite>应用</cite>
+              </a>
+              <dl class="layui-nav-child list-group">
+                <dd>
+                  <a class="list-group-item"  lay-href="/app/listMySoftware"><i class="fa fa-cube fa-fw" aria-hidden="true">&nbsp;我的應用</i></a>
+                </dd>
+              </dl>
+            </li>
+            <li data-name="service" class="layui-nav-item">
+              <a href="javascript:;" lay-tips="服務" lay-direction="2">
+                <i class="layui-icon layui-icon-senior"></i>
+                <cite>服務</cite>
+              </a>
+              <dl class="layui-nav-child list-group">
+                <dd data-name="mail">
+                  <a class="list-group-item" href="javascript:;"><i class="fa fa-envelope-open fa-fw" aria-hidden="true">&nbsp;郵件系統</i></a>
+                  <dl class="layui-nav-child">
+                    <dd data-name="listMySmtp"><a lay-href="/service/mail/listMySmtp">SMTP配置</a></dd>
+                    <dd data-name="listMyMail"><a lay-href="/service/mail/listMyMail">郵件列表</a></dd>
+                  </dl>
+                </dd>
+                <dd data-name="sms">
+                  <a class="list-group-item" href="javascript:;"><i class="fa fa-commenting fa-fw" aria-hidden="true">&nbsp;短信系統</i></a>
+                  <dl class="layui-nav-child">
+                    <dd data-name="listMySms"><a lay-href="/service/sms/listMySms">短信列表</a></dd>
+                  </dl>
+                </dd>
+                <dd data-name="link">
+                  <a class="list-group-item" href="javascript:;"><i class="fa fa-exchange fa-fw" aria-hidden="true">&nbsp;短連系統</i></a>
+                  <dl class="layui-nav-child">
+                    <dd data-name="listMyLink"><a lay-href="/service/link/listMyLink">短連列表</a></dd>
+                    <dd data-name="listMyLinkRecord"><a lay-href="/service/link/listMyLinkRecord">解析記錄</a></dd>
+                  </dl>
+                </dd>
+                <dd data-name="file">
+                  <a class="list-group-item" href="javascript:;"><i class="fa fa-file-archive-o fa-fw" aria-hidden="true">&nbsp;文件系統</i></a>
+                  <dl class="layui-nav-child">
+                    <dd data-name="listMyCos"><a lay-href="/service/file/listMyCos">COS配置</a></dd>
+                    <dd data-name="listMyFile"><a lay-href="/service/file/listMyFile">對象儲存</a></dd>
+                  </dl>
+                </dd>
+                <dd data-name="line">
+                  <a class="list-group-item" href="javascript:;"><i class="fa fa-superpowers fa-fw" aria-hidden="true">&nbsp;line系統</i></a>
+                  <dl class="layui-nav-child">
+                    <dd data-name="listLineConfig"><a lay-href="/service/line/listLineConfig">line配置</a></dd>
+                    <dd data-name="listPushMessage"><a lay-href="/service/line/listPushMessage">推送記錄</a></dd>
+                  </dl>
+                </dd>
+                <dd data-name="var">
+                  <a class="list-group-item" href="javascript:;"><i class="fa fa-wpexplorer fa-fw" aria-hidden="true">&nbsp;变量系統</i></a>
+                  <dl class="layui-nav-child">
+                    <dd data-name="listVar"><a lay-href="/service/var/listVar">遠程變量</a></dd>
+                    <dd data-name="listVarRecord"><a lay-href="/service/var/listVarRecord">訪問記錄</a></dd>
+                  </dl>
+                </dd>
+                <dd data-name="log">
+                  <a class="list-group-item" href="javascript:;"><i class="fa fa-umbrella fa-fw" aria-hidden="true">&nbsp;日志系統</i></a>
+                  <dl class="layui-nav-child">
+                    <dd data-name="listLog"><a lay-href="/service/log/listLog">遠程日志</a></dd>
+                  </dl>
+                </dd>
+              </dl>
+            </li>
+            <li data-name="safety" class="layui-nav-item">
+              <a href="javascript:;" lay-tips="安全" lay-direction="2">
+                <i class="layui-icon layui-icon-auz"></i>
+                <cite>安全</cite>
+              </a>
+              <dl class="layui-nav-child list-group">
+                <dd>
+                  <a class="list-group-item" lay-href="/safety/listFirewall"><i class="fa fa-map-signs fa-fw" aria-hidden="true">&nbsp;防火墻</i></a>
+                </dd>
+                <dd>
+                  <a class="list-group-item" lay-href="/safety/listInterceptRecord"><i class="fa fa-ban fa-fw" aria-hidden="true">&nbsp;攔截記錄</i></a>
+                </dd>
+              </dl>
+            </li>
+            <li data-name="api" class="layui-nav-item">
+              <a href="javascript:;" lay-tips="反饋" lay-direction="2">
+                <i class="layui-icon layui-icon-service"></i>
+                <cite>反饋</cite>
+              </a>
+              <dl class="layui-nav-child">
+                <dd>
+                  <a class="list-group-item" target="_blank" href="https://support.qq.com/products/283449"><i class="fa fa fa-bug fa-fw" aria-hidden="true">&nbsp;吐個槽</i></a>
+                </dd>
+              </dl>
+            </li>
+            <li data-name="api" class="layui-nav-item">
+              <a href="javascript:;" lay-tips="Api授權" lay-direction="2">
+                <i class="layui-icon layui-icon-read"></i>
+                <cite>Api授權</cite>
+              </a>
+              <dl class="layui-nav-child">
+                <dd>
+                  <a class="list-group-item" lay-href="/api/index"><i class="fa fa-puzzle-piece fa-fw" aria-hidden="true">&nbsp;ApiPost</i></a>
+                </dd>
+                <dd>
+                  <a class="list-group-item" lay-href="//courier-api.iskwen.com/swagger-ui.html" onclick="showToastrInfo('正在生成api文檔','請耐心等候...',2,2000);"><i class="fa fa-book fa-fw" aria-hidden="true">&nbsp;Swagger</i></a>
+                </dd>
+              </dl>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+
+      <!-- 页面标签 -->
+      <div class="layadmin-pagetabs" id="LAY_app_tabs">
+        <div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
+        <div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
+        <div class="layui-icon layadmin-tabs-control layui-icon-down">
+          <ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
+            <li class="layui-nav-item" lay-unselect>
+              <a href="javascript:;"></a>
+              <dl class="layui-nav-child layui-anim-fadein">
+                <dd layadmin-event="closeThisTabs"><a href="javascript:;">关闭当前标签页</a></dd>
+                <dd layadmin-event="closeOtherTabs"><a href="javascript:;">关闭其它标签页</a></dd>
+                <dd layadmin-event="closeAllTabs"><a href="javascript:;">关闭全部标签页</a></dd>
+              </dl>
+            </li>
+          </ul>
+        </div>
+        <div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
+          <ul class="layui-tab-title" id="LAY_app_tabsheader">
+            <li lay-id="/home/console" lay-attr="/home/console" class="layui-this"><i class="layui-icon layui-icon-home"></i></li>
+          </ul>
+        </div>
+      </div>
+      
+      
+      <!-- 主体内容 -->
+      <div class="layui-body" id="LAY_app_body">
+        <div class="layadmin-tabsbody-item layui-show">
+          <iframe src="/home/console" frameborder="0" class="layadmin-iframe"></iframe>
+        </div>
+      </div>
+      <!-- 辅助元素，一般用于移动设备下遮罩 -->
+      <div class="layadmin-body-shade" layadmin-event="shade"></div>
+    </div>
+  </div>
+  <script src="https://static.iskwen.com/jquery-v3.4.1/jquery-3.4.1.min.js"></script>
+  <script src="https://static.iskwen.com/layui-v2.5.5/layui/layui.all.js"></script>
+  <script src='https://static.iskwen.com/yuncourier/js/md5.js'></script>
+  <script src="https://static.iskwen.com/yuncourier/js/util.js"></script>
+  <script src="https://static.iskwen.com/yuncourier/js/messagebox.js"></script>
+  <script src="https://static.iskwen.com/yuncourier/js/templates/index.js?v=1594026181"></script>
+  <script type="text/javascript">
+    function browserRedirect() {
+      var sUserAgent = navigator.userAgent.toLowerCase();
+      // alert(sUserAgent);
+      if (/ipad|iphone|midp|rv:1.2.3.4|ucweb|android|windows ce|windows mobile/.test(sUserAgent)) {
+        //移动端
+      } else {//PC
+        $("#versionMsg").removeAttr("href");
+        $('#versionMsg').attr('layadmin-event','about');
+      }
+    }
+    browserRedirect();
+  </script>
+  <script>
+  layui.config({
+    base: 'https://static.iskwen.com/yuncourier/config/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use('index');function getUnreadMessageCount() {
+    $.ajax({
+      url : "//courier-api.iskwen.com/api/getUnreadMessageCount",
+      type : "post",
+      dataType:"json",
+      headers: {'Authorization': getCookie("token")},
+      success:function(msg){
+        if(msg.status==0){
+          if(msg.unreadMessageCount>99){
+            $("#messageState").html("99+");
+          }else{
+            if(msg.unreadMessageCount>0){
+              $("#messageState").html(msg.unreadMessageCount);
+            }else{
+              $("#messageState").html(0);
+            }
+          }
+        }else{
+          // showTip(msg.tip);
+        }
+      },
+      error:function(XMLHttpRequest, textStatus, errorThrown){
+        // showErrorMsg("系统在开小差，请稍后再试");
+      }
+    });
+  }
+  </script>
+</body>
+</html>
+
+

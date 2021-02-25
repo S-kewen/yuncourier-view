@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="https://static.iskwen.com/layui-v2.5.5/layui/css/layui.css" media="all">
+    <script src="https://static.iskwen.com/jquery-v3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="https://static.iskwen.com/layui-v2.5.5/layui/layui.all.js" charset="utf-8"></script>
+    <script src="https://static.iskwen.com/yuncourier/js/util.js"></script>
+    <script src="https://static.iskwen.com/yuncourier/js/messagebox.js"></script>
+    <script src="https://static.iskwen.com/yuncourier/js/templates/service/mail/seeMail.js?v=1594026181"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d6edbe06194cd058fc9719532b6f714d";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153564967-5"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-153564967-5');
+    </script>
+</head>
+<body>
+
+
+<form class="layui-form layui-form-pane" id="createUser">
+    <div class="layui-tab">
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">應用Id</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="softwareId" name="softwareId" autocomplete="off"
+                               placeholder="應用Id,系統自動生成" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">應用名稱</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="softwareName" name="softwareName" autocomplete="off"
+                               placeholder="軟件名稱,長度不能大於16" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">token</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="token" name="token" autocomplete="off" placeholder="token,系統自動生成"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">類型</label>
+                    <div class="layui-input-inline">
+                        <select id="content_type" name="content_type" lay-verify="content_type">
+                            <option value="0" disabled>未知</option>
+                            <option value="1">普通</option>
+                            <option value="2">html</option>
+                            <option value="3">flowWarn</option>
+                        </select>
+                    </div>
+                    <label class="layui-form-label">狀態</label>
+                    <div class="layui-input-inline">
+                        <select id="state" name="state" lay-verify="state">
+                            <option value="0" disabled>未知</option>
+                            <option value="1">成功</option>
+                            <option value="2">失敗</option>
+                            <option value="3">補發</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">收件人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="receive_mail" name="receive_mail" autocomplete="off"
+                               placeholder="收件人,長度不能超過255" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">發件人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="sender" name="sender" autocomplete="off" placeholder="發件人,長度不能超過255"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">標題</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="title" name="title" autocomplete="off" placeholder="郵件標題,長度不能超過255"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">內容</label>
+                    <div class="layui-input-block">
+                        <textarea id="msg" name="msg" placeholder="郵件內容,長度不能超過6000" class="layui-textarea"
+                                  style="height: 150px"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">客戶端IP</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="ip" name="ip" autocomplete="off" placeholder="ip,長度不能超過255"
+                               class="layui-input">
+                    </div>
+                    <label class="layui-form-label">創建時間</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="addTime" name="addTime" autocomplete="off" placeholder="發送時間,長度不能超過255"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <textarea id="remark" name="remark" placeholder="備註信息,長度不能超過255" class="layui-textarea"
+                                  style="height: 150px"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    var form = layui.form;
+    form.render();
+    var laydate = layui.laydate;
+    laydate.render({
+        elem: '#addTime',
+        type: 'datetime',
+        trigger: 'click',//呼出事件改成click
+        format: 'yyyy-MM-dd HH:mm:ss'
+    });
+</script>
+</body>
+</html>

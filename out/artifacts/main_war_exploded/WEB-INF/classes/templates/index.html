@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>雲通訊系統</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="/layui-v2.5.5/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="/layui-v2.5.5/layui/style/admin.css" media="all">
+  <link rel="stylesheet" href="/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+  <link href="/css/font-awesome.min93e3.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+  
+  <div id="LAY_app">
+    <div class="layui-layout layui-layout-admin">
+      <div class="layui-header">
+        <!-- 头部区域 -->
+        <ul class="layui-nav layui-layout-left">
+          <li class="layui-nav-item layadmin-flexible" lay-unselect>
+            <a href="javascript:;" layadmin-event="flexible" title="側邊伸縮">
+              <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+            </a>
+          </li>
+<!--          <li class="layui-nav-item layui-hide-xs" lay-unselect>-->
+<!--            <a href="http://www.layui.com/admin/" target="_blank" title="前台">-->
+<!--              <i class="layui-icon layui-icon-website"></i>-->
+<!--            </a>-->
+<!--          </li>-->
+          <li class="layui-nav-item" lay-unselect>
+            <a href="javascript:refresh();" layadmin-event="refresh" title="刷新">
+              <i class="layui-icon layui-icon-refresh-3"></i>
+            </a>
+          </li>
+<!--          <li class="layui-nav-item layui-hide-xs" lay-unselect>-->
+<!--            <input type="text" placeholder="搜索..." autocomplete="off" class="layui-input layui-input-search" layadmin-event="serach" lay-action="template/search.html?keywords="> -->
+<!--          </li>-->
+        </ul>
+        <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+          
+          <li class="layui-nav-item" lay-unselect>
+            <a lay-href="/user/listMessage" href="javascript:refresh();" layadmin-event="message" lay-text="信息中心">
+              <i class="layui-icon layui-icon-notice"><span class="layui-badge" id="messageState">0</span></i>
+              
+              <!-- 如果有新消息，则显示小圆点 -->
+
+            </a>
+          </li>
+          <li class="layui-nav-item layui-hide-xs" lay-unselect>
+            <a href="javascript:;" layadmin-event="theme">
+              <i class="layui-icon layui-icon-theme"></i>
+            </a>
+          </li>
+          <li class="layui-nav-item layui-hide-xs" lay-unselect>
+            <a href="javascript:note();" layadmin-event="note">
+              <i class="layui-icon layui-icon-note"></i>
+            </a>
+          </li>
+          <li class="layui-nav-item layui-hide-xs" lay-unselect>
+            <a href="javascript:;" layadmin-event="fullscreen">
+              <i class="layui-icon layui-icon-screen-full"></i>
+            </a>
+          </li>
+          <li class="layui-nav-item" lay-unselect>
+            <a href="javascript:;">
+              <cite id="usernameByCite"></cite>
+            </a>
+            <dl class="layui-nav-child">
+              <dd><a lay-href="/user/index">個人中心</a></dd>
+              <dd><a href="javascript:modifyInfo();">修改資料</a></dd>
+              <dd><a href="javascript:modifyPassword();">修改密碼</a></dd>
+              <hr>
+              <dd><a href="javascript:logout();" style="text-align: center;">退出</a></dd>
+            </dl>
+          </li>
+          
+          <li class="layui-nav-item layui-hide-xs" lay-unselect>
+            <a href="javascript:;" layadmin-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a>
+          </li>
+          <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
+            <a href="javascript:;" layadmin-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- 侧边菜单 -->
+      <div class="layui-side layui-side-menu">
+        <div class="layui-side-scroll">
+          <div class="layui-logo" lay-href="/home/console">
+            <span id="usernameBySpan">yunCourier-云遞</span>
+          </div>
+          
+          <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+            <li data-name="home" class="layui-nav-item layui-nav-itemed">
+              <a href="javascript:;" lay-tips="主頁" lay-direction="2">
+                <i class="layui-icon layui-icon-home"></i>
+                <cite>主頁</cite>
+              </a>
+              <dl class="layui-nav-child">
+                <dd data-name="console" class="layui-this">
+
+                  <a lay-href="/home/console"><i class="fa fa-tachometer"></i>控制台</a>
+                </dd>
+              </dl>
+            </li>
+            <li data-name="user" class="layui-nav-item">
+              <a href="javascript:;" lay-tips="個人" lay-direction="2">
+                <i class="layui-icon layui-icon-user"></i>
+                <cite>個人</cite>
+              </a>
+              <dl class="layui-nav-child">
+                <dd>
+                  <a lay-href="/user/index"><i class="fa fa-user-circle-o"></i>個人中心</a>
+                </dd>
+                <dd>
+                  <a lay-href="/user/listTransaction"><i class="fa fa-usd"></i>交易明細</a>
+                </dd>
+                <dd>
+                  <a lay-href="/user/listLoginRecord"><i class="fa fa-shield"></i>登錄記錄</a>
+                </dd>
+                <dd>
+                  <a lay-href="/user/listMessage"><i class="fa fa-envelope"></i>信息中心</a>
+                </dd>
+              </dl>
+            </li>
+            <li data-name="app" class="layui-nav-item">
+              <a href="javascript:;" lay-tips="应用" lay-direction="2">
+                <i class="layui-icon layui-icon-app"></i>
+                <cite>应用</cite>
+              </a>
+              <dl class="layui-nav-child">
+                <dd>
+
+                  <a lay-href="/app/listMySoftware"><i class="fa fa-cube">我的應用</i></a>
+                </dd>
+              </dl>
+            </li>
+            <li data-name="service" class="layui-nav-item">
+              <a href="javascript:;" lay-tips="服務" lay-direction="2">
+                <i class="layui-icon layui-icon-senior"></i>
+                <cite>服務</cite>
+              </a>
+              <dl class="layui-nav-child">
+
+                <dd data-name="content">
+                  <a href="javascript:;"><i class="fa fa-envelope-open">郵件系統</i></a>
+                  <dl class="layui-nav-child">
+<!--                    <i class="fa fa-list">請求列表</i>-->
+                    <dd data-name="list"><a lay-href="/service/mail/listMyMail">郵件列表</a></dd>
+                  </dl>
+                </dd>
+                <dd data-name="forum">
+                  <a href="javascript:;"><i class="fa fa-commenting">短信系統</i></a>
+                  <dl class="layui-nav-child">
+                    <dd data-name="list"><a lay-href="/service/sms/listMySms">短信列表</a></dd>
+                  </dl>
+                </dd>
+              </dl>
+            </li>
+            <li data-name="api" class="layui-nav-item">
+              <a href="javascript:;" lay-tips="Api授權" lay-direction="2">
+                <i class="layui-icon layui-icon-senior"></i>
+                <cite>Api授權</cite>
+              </a>
+              <dl class="layui-nav-child">
+                <dd>
+                  <a lay-href="/api/index"><i class="fa fa-puzzle-piece">Api文檔</i></a>
+                </dd>
+              </dl>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 页面标签 -->
+      <div class="layadmin-pagetabs" id="LAY_app_tabs">
+        <div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
+        <div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
+        <div class="layui-icon layadmin-tabs-control layui-icon-down">
+          <ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
+            <li class="layui-nav-item" lay-unselect>
+              <a href="javascript:;"></a>
+              <dl class="layui-nav-child layui-anim-fadein">
+                <dd layadmin-event="closeThisTabs"><a href="javascript:;">关闭当前标签页</a></dd>
+                <dd layadmin-event="closeOtherTabs"><a href="javascript:;">关闭其它标签页</a></dd>
+                <dd layadmin-event="closeAllTabs"><a href="javascript:;">关闭全部标签页</a></dd>
+              </dl>
+            </li>
+          </ul>
+        </div>
+        <div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
+          <ul class="layui-tab-title" id="LAY_app_tabsheader">
+            <li lay-id="/home/console" lay-attr="/home/console" class="layui-this"><i class="layui-icon layui-icon-home"></i></li>
+          </ul>
+        </div>
+      </div>
+      
+      
+      <!-- 主体内容 -->
+      <div class="layui-body" id="LAY_app_body">
+        <div class="layadmin-tabsbody-item layui-show">
+          <iframe src="/home/console" frameborder="0" class="layadmin-iframe"></iframe>
+        </div>
+      </div>
+      
+      <!-- 辅助元素，一般用于移动设备下遮罩 -->
+      <div class="layadmin-body-shade" layadmin-event="shade"></div>
+    </div>
+  </div>
+  <script src="/jquery-v3.4.1/jquery-3.4.1.min.js"></script>
+  <script src="/layui-v2.5.5/layui/layui.js"></script>
+  <script src="/js/messagebox.js"></script>
+  <script src="/js/util.js"></script>
+  <script src="/js/templates/index.js"></script>
+  <script>
+  layui.config({
+    base: '/config/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use('index');
+  </script>
+  
+</body>
+</html>
+
+

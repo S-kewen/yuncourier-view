@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="https://static.iskwen.com/layui-v2.5.5/layui/css/layui.css"media="all">
+    <script src="https://static.iskwen.com/jquery-v3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="https://static.iskwen.com/layui-v2.5.5/layui/layui.all.js" charset="utf-8"></script>
+    <script src="https://static.iskwen.com/yuncourier/js/util.js" charset="utf-8"></script>
+    <script src="https://static.iskwen.com/yuncourier/js/messagebox.js"></script>
+    <script src="https://static.iskwen.com/cryptoJS-v2019/components/core.js" charset="utf-8"></script>
+    <script src="https://static.iskwen.com/cryptoJS-v2019/components/evpkdf.js" charset="utf-8"></script>
+    <script src="https://static.iskwen.com/cryptoJS-v2019/components/enc-base64.js" charset="utf-8"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d6edbe06194cd058fc9719532b6f714d";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153564967-5"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-153564967-5');
+    </script>
+</head>
+<body>
+<form class="layui-form layui-form-pane" id="editFile" >
+    <div class="layui-tab">
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">文件名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="fileName" id="fileName" value='' placeholder="長度不能超過255" autocomplete="off" class="layui-input">
+                        </div>
+                        <label class="layui-form-label">狀態</label>
+                        <div class="layui-input-inline">
+                            <select name="state" id="state" lay-search>
+                                <option value="0" selected disabled>請選擇..</option>
+                                <option value="1" >啟用</option>
+                                <option value="2" >停用</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">公開</label>
+                        <div class="layui-input-inline">
+                            <select name="openType" id="openType" lay-search>
+                                <option value="0" selected disabled>請選擇..</option>
+                                <option value="1" >公有</option>
+                                <option value="2" >私人</option>
+                            </select>
+                        </div>
+                        <label class="layui-form-label">訪問密碼</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="password" id="password" value='' placeholder="長度不能超過6" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">期限</label>
+                            <div class="layui-input-inline">
+                                <select name="depositType" id="depositType" lay-search>
+                                    <option value="0" selected disabled>請選擇..</option>
+                                    <option value="1" >永久</option>
+                                    <option value="2" >臨時</option>
+                                </select>
+                            </div>
+                            <label class="layui-form-label">過期時間</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="expireTime" id="expireTime" placeholder="請輸入到期時間" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">備註</label>
+                            <div class="layui-input-block">
+                                <textarea name="remark" id="remark" placeholder="請輸入備註，長度不能超過255" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+<script>
+        var form = layui.form;
+        $.ajax({
+            url:"//courier-api.iskwen.com/api/getFileInfo",
+            type:"POST",
+            dataType: "json",
+            data:"id="+getUrlValue("id"),
+            headers: {'Authorization': getCookie("token")},
+            success:function(msg){
+                if(msg.status==0){
+                    $("#fileName").val(msg.fileName);
+                    $("#password").val(msg.password);
+                    $("#openType").find("option[value='"+msg.openType+"']").attr("selected",true);
+                    $("#state").find("option[value='"+msg.state+"']").attr("selected",true);
+                    $("#depositType").find("option[value='"+msg.depositType+"']").attr("selected",true);
+                    $("#expireTime").val(msg.expireTime);
+                    $("#remark").html(msg.remark);
+                    form.render();
+                }else{
+                    showTip(msg.tip);
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                <!--showErrorMsg(XMLHttpRequest.status);-->
+                showErrorMsg("系统在开小差，请稍后再试");
+            }
+        });
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#expireTime',
+            type: 'datetime',
+            trigger: 'click',//呼出事件改成click
+            format: 'yyyy-MM-dd HH:mm:ss'
+        });
+</script>
+</html>

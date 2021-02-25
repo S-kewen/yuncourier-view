@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cos文件下載</title>
+    <meta name="checkKey" content="MyBox-CheckKey">
+    <meta name="description" content="MyBox-CheckKey">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="https://static.iskwen.com/yuncourier/css/style.min862f.css" rel="stylesheet">
+    <link href="https://static.iskwen.com/yuncourier/css/font-awesome.min93e3.css" rel="stylesheet">
+    <link href="https://static.iskwen.com/yuncourier/css/animate.min.css" rel="stylesheet">
+    <link href="https://static.iskwen.com/yuncourier/css/bootstrap.min14ed.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://static.iskwen.com/layui-v2.5.5/layui/css/layui.css" media="all">
+    <script src="https://static.iskwen.com/jquery-v3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="https://static.iskwen.com/layui-v2.5.5/layui/layui.all.js"></script>
+    <script src="https://static.iskwen.com/yuncourier/js/util.js"></script>
+    <script src="https://static.iskwen.com/yuncourier/js/messagebox.js"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d6edbe06194cd058fc9719532b6f714d";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153564967-5"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-153564967-5');
+    </script>
+</head>
+<script type="text/javascript">
+    function getUrlVal(val){
+        let reg = new RegExp("(^|&)" + val + "=([^&]*)(&|$)");
+        let r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return unescape(r[2]);
+        }else{
+            return "";
+        }
+    }
+    window.onload = function () {
+        console.log(getUrlVal('id'));
+        $('#id').val(getUrlVal('id'));
+        $('#sign').val(getUrlVal('sign'));
+        $('#password').val(getUrlVal('password'));
+    }
+    function checkInt(str) {
+        if(!/^\d+$/.test(str)){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    function sendCheck(){
+        var id = $("#id").val();
+        var sign = $("#sign").val();
+        var password = $("#password").val();
+        if(id==''){
+            showTip("id不能為空");
+            return false;
+        }
+        if(!checkInt(id)){
+            showTip("id必須為整數");
+            return false;
+        }
+        if(sign==''){
+            showTip("sign不能為空");
+            return false;
+        }
+        // if(password=='' || password==null){
+        //     showTip("密匙不能为空");
+        //     return false;
+        // }
+        $.ajax({
+            url:"https://courier-api.iskwen.com/api/downloadFile",
+            type:"POST",
+            dataType: "json",
+            data:"id="+id+"&sign="+sign+"&password="+password,
+            success:function(msg){
+                if(msg.status==0){
+                    showMsg("正在前往下載...");
+                    window.location = msg.url;
+                }else{
+                    showTip(msg.tip);
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                showErrorMsg("系统在开小差，请稍后再试");
+            }
+        });
+
+    }
+</script>
+<script>
+    function keyLogin(){
+        if (event.keyCode==13)   //回车键的键值为13
+            sendCheck();
+    }
+</script>
+<body class="gray-bg" onkeydown="keyLogin();">
+
+<div class="text-center">
+    <h1 class="logo-name" style="color: #20A296">yunCourier</h1>
+</div>
+<div class="middle-box text-center loginscreen  animated fadeInDown">
+    <div>
+        <h3>文件下載</h3>
+        <form class="m-t" role="form">
+            <div class="form-group">
+                <input type="text"  id="id" name="id" class="form-control" placeholder="id" >
+            </div>
+            <div class="form-group">
+                <input type="text"  id="sign" name="sign" class="form-control" placeholder="sign" >
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" name="password" class="form-control" placeholder="請輸入文件下載密匙(選填)" >
+            </div>
+            <div class="form-group">
+                <button type="button" id="checkKey" onclick="javascript:sendCheck();" class="btn btn-primary block full-width m-b">確 定</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
