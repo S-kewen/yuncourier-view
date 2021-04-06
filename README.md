@@ -3,7 +3,7 @@
 demo: https://courier.iskwen.com/
 (測試賬號：test，密碼：test123456)
 
-前端：https://github.com/S-kwen/yuncourier-view
+後端：https://github.com/S-kwen/yuncourier-api
 
 swagger-api: https://courier-api.iskwen.com/swagger-ui.html
 
