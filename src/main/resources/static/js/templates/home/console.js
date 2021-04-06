@@ -10,13 +10,16 @@ $(document).ready(function() {
                 let ramTip;
                 $("#todayRunNum").html(msg.todayRunNum);
                 $("#allRunNum").html(msg.allRunNum);
-                if(msg.todayPay>=100000){
+                if(msg.todayPay>=10000){
                     $("#todayPay").html((msg.todayPay/1000).toFixed(2));
                     $("#todayPayUnit").html('k');
+                }else{
+                    $("#todayPay").html(msg.todayPay.toFixed(2));
+                }
+                if(msg.allPay>=10000){
                     $("#allPay").html((msg.allPay/1000).toFixed(2));
                     $("#allPayUnit").html('k');
                 }else{
-                    $("#todayPay").html(msg.todayPay.toFixed(2));
                     $("#allPay").html(msg.allPay.toFixed(2));
                 }
                 $(".numToThousands").numScroll({
