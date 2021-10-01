@@ -35,75 +35,6 @@
         gtag('config', 'UA-153564967-5');
     </script>
 </head>
-<script type="text/javascript">
-    function getUrlVal(val){
-        let reg = new RegExp("(^|&)" + val + "=([^&]*)(&|$)");
-        let r = window.location.search.substr(1).match(reg);
-        if (r != null) {
-            return unescape(r[2]);
-        }else{
-            return "";
-        }
-    }
-    window.onload = function () {
-        console.log(getUrlVal('id'));
-        $('#id').val(getUrlVal('id'));
-        $('#sign').val(getUrlVal('sign'));
-        $('#password').val(getUrlVal('password'));
-    }
-    function checkInt(str) {
-        if(!/^\d+$/.test(str)){
-            return false;
-        }else{
-            return true;
-        }
-    }
-    function sendCheck(){
-        var id = $("#id").val();
-        var sign = $("#sign").val();
-        var password = $("#password").val();
-        if(id==''){
-            showTip("id不能為空");
-            return false;
-        }
-        if(!checkInt(id)){
-            showTip("id必須為整數");
-            return false;
-        }
-        if(sign==''){
-            showTip("sign不能為空");
-            return false;
-        }
-        // if(password=='' || password==null){
-        //     showTip("密匙不能为空");
-        //     return false;
-        // }
-        $.ajax({
-            url:"https://courier-api.iskwen.com/api/downloadFile",
-            type:"POST",
-            dataType: "json",
-            data:"id="+id+"&sign="+sign+"&password="+password,
-            success:function(msg){
-                if(msg.status==0){
-                    showMsg("正在前往下載...");
-                    window.location = msg.url;
-                }else{
-                    showTip(msg.tip);
-                }
-            },
-            error:function(XMLHttpRequest, textStatus, errorThrown){
-                showErrorMsg("系统在开小差，请稍后再试");
-            }
-        });
-
-    }
-</script>
-<script>
-    function keyLogin(){
-        if (event.keyCode==13)   //回车键的键值为13
-            sendCheck();
-    }
-</script>
 <body class="gray-bg" onkeydown="keyLogin();">
 
 <div class="text-center">
@@ -129,4 +60,5 @@
     </div>
 </div>
 </body>
+<script src="https://static.iskwen.com/yuncourier/js/templates/service/file/downFileCosFile.js?v=1594026181"></script>
 </html>
